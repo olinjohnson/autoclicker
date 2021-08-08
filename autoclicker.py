@@ -1,4 +1,5 @@
 import time
+import threading
 from pynput.mouse import Button, Controller
 from pynput.keyboard import Listener
 
@@ -7,8 +8,9 @@ button = Button.left
 startstopkey = 'h'
 exitkey = 'k'
 
-class Mouse():
+class Mouse(threading.Thread):
     def __init__(self):
+        threading.Thread.__init__(self)
         self.delay = delay
         self.running = True
         self.clicking = False
@@ -20,8 +22,9 @@ class Mouse():
             self.clicking = False
         else:
             self.clicking = True
-    
+
     def stop(self):
+        self.clicking = False
         self.running = False
             
     def run(self):
@@ -46,6 +49,6 @@ listener = Listener(on_press=on_press)
 listener.start()
 
 m = Mouse()
-m.run()
+m.start()
 
 listener.join()
